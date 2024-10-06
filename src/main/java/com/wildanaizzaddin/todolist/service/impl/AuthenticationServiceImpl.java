@@ -61,4 +61,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .token(jwtService.generateToken(user))
                 .build();
     }
+
+    @Override
+    public UserEntity getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow();
+    }
 }
