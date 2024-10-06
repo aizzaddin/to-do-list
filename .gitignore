@@ -2,3 +2,5 @@
 .gradle
 **/build/
 !src/**/build/
+
+application-dev.properties
