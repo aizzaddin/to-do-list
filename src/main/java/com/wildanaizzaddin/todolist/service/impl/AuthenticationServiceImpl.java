@@ -1,8 +1,9 @@
 package com.wildanaizzaddin.todolist.service.impl;
 
 import com.wildanaizzaddin.todolist.config.JwtService;
-import com.wildanaizzaddin.todolist.dto.AuthenticationDto;
-import com.wildanaizzaddin.todolist.dto.RegisterDto;
+import com.wildanaizzaddin.todolist.dto.AuthRequest;
+import com.wildanaizzaddin.todolist.dto.AuthResponse;
+import com.wildanaizzaddin.todolist.dto.RegisterRequest;
 import com.wildanaizzaddin.todolist.model.Role;
 import com.wildanaizzaddin.todolist.model.UserEntity;
 import com.wildanaizzaddin.todolist.repository.UserRepository;
@@ -24,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public String register(RegisterDto request) {
+    public AuthResponse register(RegisterRequest request) {
         Optional<UserEntity> user = userRepository.findByEmail(request.getEmail());
         if (user.isEmpty()) {
             UserEntity newUser = userRepository.save(UserEntity
@@ -34,14 +35,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                             .password(passwordEncoder.encode(request.getPassword()))
                             .role(Role.USER)
                     .build());
-            return jwtService.generateToken(newUser);
+            return AuthResponse
+                    .builder()
+                    .token(jwtService.generateToken(newUser))
+                    .build();
         }
 
         throw new RuntimeException("Email already registered");
     }
 
     @Override
-    public String authenticate(AuthenticationDto request) {
+    public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -52,6 +56,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserEntity user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-        return jwtService.generateToken(user);
+        return AuthResponse
+                .builder()
+                .token(jwtService.generateToken(user))
+                .build();
     }
 }

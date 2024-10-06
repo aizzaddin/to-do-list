@@ -1,12 +1,12 @@
 package com.wildanaizzaddin.todolist.controller.auth;
 
-import com.wildanaizzaddin.todolist.dto.AuthenticationDto;
-import com.wildanaizzaddin.todolist.dto.RegisterDto;
+import com.wildanaizzaddin.todolist.dto.AuthRequest;
+import com.wildanaizzaddin.todolist.dto.AuthResponse;
+import com.wildanaizzaddin.todolist.dto.RegisterRequest;
 import com.wildanaizzaddin.todolist.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,18 +22,14 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDto register) {
-        Map<String, String> response = new HashMap<>();
-
-        response.put("token", authenticationService.register(register));
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest register) {
+        AuthResponse response = authenticationService.register(register);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Map<String, String>> authenticate(@RequestBody AuthenticationDto auth) {
-        Map<String, String> response = new HashMap<>();
-
-        response.put("token", authenticationService.authenticate(auth));
+    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest auth) {
+        AuthResponse response = authenticationService.authenticate(auth);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

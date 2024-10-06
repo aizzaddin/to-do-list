@@ -1,9 +1,10 @@
 package com.wildanaizzaddin.todolist.service;
 
-import com.wildanaizzaddin.todolist.dto.AuthenticationDto;
-import com.wildanaizzaddin.todolist.dto.RegisterDto;
+import com.wildanaizzaddin.todolist.dto.AuthRequest;
+import com.wildanaizzaddin.todolist.dto.AuthResponse;
+import com.wildanaizzaddin.todolist.dto.RegisterRequest;
 
 public interface AuthenticationService {
-    String register(RegisterDto request);
-    String authenticate(AuthenticationDto request);
+    AuthResponse register(RegisterRequest request);
+    AuthResponse authenticate(AuthRequest request);
 }
